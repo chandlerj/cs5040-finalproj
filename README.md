@@ -1,4 +1,4 @@
-# CS5(6)40 Final Project: Visualizing the Saffman-Taylor Instability
+# CS(5/6)040 Final Project: Visualizing the Saffman-Taylor Instability
 
 # Deliverables
 
