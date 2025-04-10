@@ -1,25 +1,36 @@
-import os
+import os, sys, json
 from paraview import simple
 from trame.app import get_server
 from trame.ui.vuetify3 import SinglePageLayout
 from trame.widgets import paraview, vuetify3, html
 from isovolumestate import IsoVolumeState
+from glyphstate import GlyphState
 
-# ---------------------
-# Trame App Setup
-# ---------------------
+# select visualization
+default_viz = "Point Cloud"
+try:
+    with open("viz_config.json") as f:
+        default_viz = json.load(f).get("selected", default_viz)
+except FileNotFoundError:
+    print(f"Configuration file viz_config.json not found, continuing with default: {default_viz}")
+    # Continue with the default visualization
+    pass
+
+
+# trame setup
 server = get_server()
 state, ctrl = server.state, server.controller
 paraview.initialize(server)
 
 
 visualizations = {
-        "Point Cloud": IsoVolumeState("isostate.pvsm", state)
+        "Point Cloud": IsoVolumeState("isostate.pvsm", state),
+        "Glyphs": GlyphState("glyphstate.pvsm", state)
 }
-curr_viz = visualizations['Point Cloud']
+curr_viz = visualizations[default_viz]
 
-state.viz_labels = ["Point Cloud"]
-state.curr_viz_label = "Point Cloud"
+state.viz_labels = ["Point Cloud", "Glyphs"]
+state.curr_viz_label = default_viz
 
 # Instantiate and load the state
 curr_viz.load()
@@ -30,9 +41,27 @@ ctrl.filter_controls = lambda: curr_viz.render_widgets()
 
 
 def update_viz_render(**kwargs):
-    curr_viz = visualizations[state.curr_viz_label]
-    ctrl.filter_controls = lambda: curr_viz.render_widgets()
+    """
+    Dump the selected state to a json file and reload
+    the server with the new state selected
+    """
+    try:
+        with open("viz_config.json") as f:
+            selected = json.load(f).get("selected")
+    except FileNotFoundError:
+        selected = None
 
+    if selected == state.curr_viz_label:
+        print("Selected visualization already loaded. Aborting reboot...")
+        return  # no change, skip restart
+
+    with open("viz_config.json", "w") as f:
+        json.dump({"selected": state.curr_viz_label}, f)
+
+    print(f"[Trame] Restarting with new selection: {state.curr_viz_label}")
+    sys.stdout.flush()
+
+    os.execv(sys.executable, [sys.executable] + sys.argv)
 
 server.change("curr_viz_label")(update_viz_render)
 
