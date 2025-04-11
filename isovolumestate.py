@@ -1,4 +1,4 @@
-from vizstate import VizState
+# from vizstate import VizState
 from trame.widgets import vuetify3
 from paraview import simple
 import os
@@ -10,15 +10,13 @@ from base_visualization import BaseVisualization
 # ---------------------
 class IsoVolumeState(BaseVisualization):
 
-    def __init__(self, statepath, trame_state):
-        super().__init__(statepath, trame_state)
+    def __init__(self, statefile, datapath, trame_state):
+        super().__init__(statefile, datapath, trame_state)
 
     def load(self):
-        working_dir = os.path.dirname(self.statepath)
-
         simple.LoadState(
             self.statepath,
-            data_directory=working_dir,
+            data_directory=self.datapath,
             restrict_to_data_directory=True,
         )
 

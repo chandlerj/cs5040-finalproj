@@ -27,4 +27,14 @@ def replace_directory_in_pvsm(pvsm_file, old_dir, new_dir):
     except Exception as e:
         print(f"Error occurred while writing to: {e}")
 
+if __name__ == "__main__":
+    if len(sys.argv) != 4:
+        print("Usage: python dir_change.py <pvsm_file> <old_dir> <new_dir>")
+        sys.exit(1)
+
+    pvsm_file = sys.argv[1]
+    old_dir = sys.argv[2]
+    new_dir = sys.argv[3]
+
+    replace_directory_in_pvsm(pvsm_file, old_dir, new_dir)
 

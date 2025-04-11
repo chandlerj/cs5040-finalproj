@@ -1,11 +1,12 @@
 import os
 
 class BaseVisualization:
-    def __init__(self, statepath, trame_state):
+    def __init__(self, statefile, datapath, trame_state):
         
         if type(self) == BaseVisualization:
             raise NotImplementedError("BaseVisualization is an abstract class. Please implement your own concrete visualization using this class")
-        self.statepath = os.path.abspath(statepath)
+        self.statepath = os.path.abspath(os.path.join("state_files", statefile))
+        self.datapath = os.path.abspath(os.path.join("data", datapath))
         self.view = None
         self.scene = None
         self.sources = {}

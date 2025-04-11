@@ -24,8 +24,8 @@ paraview.initialize(server)
 
 
 visualizations = {
-        "Point Cloud": IsoVolumeState("isostate.pvsm", state),
-        "Glyphs": GlyphState("glyphstate.pvsm", state)
+        "Point Cloud": IsoVolumeState("isostate.pvsm", "run01", state),
+        "Glyphs": GlyphState("glyphstate.pvsm", "run01", state)
 }
 curr_viz = visualizations[default_viz]
 
