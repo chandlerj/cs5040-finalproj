@@ -4,6 +4,7 @@ from trame.app import get_server
 from trame.ui.vuetify3 import SinglePageLayout
 from trame.widgets import paraview, vuetify3, html
 from isovolumestate import IsoVolumeState
+from cluster_iso_state import ClusteredState
 from glyphstate import GlyphState
 
 # select visualization
@@ -25,11 +26,12 @@ paraview.initialize(server)
 
 visualizations = {
         "Point Cloud": IsoVolumeState("isostate.pvsm", "run01", state),
-        "Glyphs": GlyphState("glyphstate.pvsm", "run01", state)
+        "Glyphs": GlyphState("glyphstate.pvsm", "run01", state),
+        "Clustered": ClusteredState("clustering_DBSCAN.pvsm", "run01_DBSCAN", state),
 }
 curr_viz = visualizations[default_viz]
 
-state.viz_labels = ["Point Cloud", "Glyphs"]
+state.viz_labels = ["Point Cloud", "Glyphs", "Clustered"]
 state.curr_viz_label = default_viz
 
 # Instantiate and load the state
