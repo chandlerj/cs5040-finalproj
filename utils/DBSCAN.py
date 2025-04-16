@@ -91,23 +91,33 @@ def process_file(infile, outfile):
         return
 
     # Create the feature matrix for DBSCAN using spatial coordinates and concentration (weighted)
-    concentration_weight = 0.9  # Adjust as needed
+    concentration_weight = 1  # Adjust as needed
     features = np.hstack([filtered_pts, (filtered_conc.reshape(-1, 1) * concentration_weight)])
     # features shape: (num_filtered, 4)
 
     # Configure DBSCAN parameters; adjust eps and min_samples based on data scale
-    eps = 1.0         # neighborhood radius
+    eps = 0.8         # neighborhood radius
     min_samples = 10  # minimum points to form a cluster
 
     db = DBSCAN(eps=eps, min_samples=min_samples)
     cluster_labels = db.fit_predict(features)
+    cluster_mean = np.zeros_like(cluster_labels, dtype=np.float32)
     unique_labels = np.unique(cluster_labels)
     print(f"Unique DBSCAN cluster labels in {infile}: {unique_labels}")
+
+    for lab in unique_labels:
+        if lab < 0:
+            cluster_mean[cluster_labels == lab] = 0.0
+        else:
+            mask_lab = (cluster_labels == lab)
+            avg_val = np.mean(filtered_conc[mask_lab])
+            cluster_mean[mask_lab] = avg_val
 
     # Create output polydata from the filtered points and attach arrays:
     arrays_dict = {
         "concentration": filtered_conc.astype(np.float32),
-        "DBSCAN_Labels": cluster_labels.astype(np.float32)  # converting to float for visualization if needed
+        "DBSCAN_Labels": cluster_labels.astype(np.float32),  # converting to float for visualization if needed
+        "Cluster_Mean_Concentration": cluster_mean  # proportional to average concentration.
     }
     # Retrieve the velocity array (if present)
     velocityArray = polydata.GetPointData().GetArray("velocity")
