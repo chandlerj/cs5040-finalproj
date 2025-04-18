@@ -74,7 +74,9 @@ class IsoVolumeState(BaseVisualization):
                     max=self.time_steps[-1],
                     step=(self.time_steps[1] - self.time_steps[0]) if len(self.time_steps) > 1 else 1,
                     label="Timestep",
-                    hide_details=True,
+                    ticks=True,
+                    thumb_label=True,
+                    hide_details=False,
                     class_="ma-4",
                 )
             )
@@ -85,6 +87,8 @@ class IsoVolumeState(BaseVisualization):
                 max=5,
                 step=0.01,
                 label="Clip X Origin",
+                ticks=True,
+                thumb_label=True,
                 hide_details=True,
                 class_="ma-4",
             )
@@ -97,7 +101,9 @@ class IsoVolumeState(BaseVisualization):
                 max=self.original_threshold_range[1],
                 step=0.1,
                 label="Min Threshold",
-                hide_details=True,
+                ticks=True,
+                thumb_label=True,
+                hide_details=False,
                 class_="ma-4",
             )
         )
@@ -110,7 +116,9 @@ class IsoVolumeState(BaseVisualization):
                 max=self.original_threshold_range[1],
                 step=0.1,
                 label="Max Threshold",
-                hide_details=True,
+                ticks=True,
+                thumb_label=True,
+                hide_details=False,
                 class_="ma-4",
             )
         )
@@ -120,6 +128,9 @@ class IsoVolumeState(BaseVisualization):
                 v_model=("color_map", self.trame_state.color_map),
                 items=("color_presets", self.trame_state.color_presets),
                 label="Color Map",
+                ticks=True,
+                thumb_label=True,
+                hide_details=False,
                 class_="ma-4",
             )
         )

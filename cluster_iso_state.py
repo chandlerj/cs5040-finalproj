@@ -51,7 +51,9 @@ class ClusteredState(BaseVisualization):
                     max=self.time_steps[-1],
                     step=(self.time_steps[1] - self.time_steps[0]) if len(self.time_steps) > 1 else 1,
                     label="Timestep",
-                    hide_details=True,
+                    ticks=True,
+                    thumb_label=True,
+                    hide_details=False,
                     class_="ma-4",
                 )
             )
@@ -66,7 +68,9 @@ class ClusteredState(BaseVisualization):
                 max=max_val,
                 step=0.1,
                 label="Min Threshold",
-                hide_details=True,
+                ticks=True,
+                thumb_label=True,
+                hide_details=False,
                 class_="ma-4",
             )
         )
