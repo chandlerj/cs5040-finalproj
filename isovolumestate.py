@@ -3,6 +3,7 @@ from trame.widgets import vuetify3
 from paraview import simple
 import os
 from base_visualization import BaseVisualization
+from trame.app import get_server
 
 # ---------------------
 # Modular VizState class
@@ -127,10 +128,15 @@ class IsoVolumeState(BaseVisualization):
         return widgets
 
     def register_callbacks(self):
+
+        server = get_server()
+        ctrl = server.controller
+
         @self.trame_state.change("time_value")
         def update_time(time_value, **kwargs):
             self.scene.AnimationTime = time_value
             self.view.StillRender()
+            ctrl.view_update()
 
         @self.trame_state.change("min_threshold")
         def update_min_threshold(min_threshold, **kwargs):
@@ -138,6 +144,7 @@ class IsoVolumeState(BaseVisualization):
             if old_range[0] != min_threshold:
                 self.filters["iso"].ThresholdRange = [min_threshold, old_range[1]]
                 self.view.StillRender()
+                ctrl.view_update()
 
         @self.trame_state.change("max_threshold")
         def update_max_threshold(max_threshold, **kwargs):
@@ -145,6 +152,7 @@ class IsoVolumeState(BaseVisualization):
             if old_range[1] != max_threshold:
                 self.filters["iso"].ThresholdRange = [old_range[0], max_threshold]
                 self.view.StillRender()
+                ctrl.view_update()
 
         @self.trame_state.change("clip_x_origin")
         def update_clip_x_origin(clip_x_origin, **kwargs):
@@ -153,11 +161,13 @@ class IsoVolumeState(BaseVisualization):
             origin[0] = clip_x_origin
             clip.ClipType.Origin = origin
             self.view.StillRender()
+            ctrl.view_update()
 
         @self.trame_state.change("color_map")
         def update_colormap(color_map, **kwargs):
             concentrationLUT = simple.GetColorTransferFunction('concentration')
             concentrationLUT.ApplyPreset(color_map, True)
             self.view.StillRender()
+            ctrl.view_update()
 
 
