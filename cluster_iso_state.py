@@ -1,7 +1,7 @@
 from trame.widgets import vuetify3
 from paraview import simple
 import os
-
+from trame.app import get_server
 from base_visualization import BaseVisualization
 
 class ClusteredState(BaseVisualization):
@@ -74,10 +74,13 @@ class ClusteredState(BaseVisualization):
         return widgets
 
     def register_callbacks(self):
+        server = get_server()
+        ctrl = server.controller
         @self.trame_state.change("time_value")
         def update_time(time_value, **kwargs):
             self.scene.AnimationTime = time_value
             self.view.StillRender()
+            ctrl.view_update()
 
         @self.trame_state.change("min_threshold")
         def update_threshold(min_threshold, **kwargs):
@@ -88,3 +91,4 @@ class ClusteredState(BaseVisualization):
                 # For a threshold between lower and upper values, set the method to "Between"
                 self.filters["threshold"].ThresholdMethod = "Between"
                 self.view.StillRender()
+                ctrl.view_update()

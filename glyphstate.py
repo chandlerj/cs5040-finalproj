@@ -1,6 +1,7 @@
 # from vizstate import VizState
 from trame.widgets import vuetify3
 from paraview import simple
+from trame.app import get_server
 import os
 
 from base_visualization import BaseVisualization
@@ -57,9 +58,12 @@ class GlyphState(BaseVisualization):
         return widgets
 
     def register_callbacks(self):
+        server = get_server()
+        ctrl = server.controller
         @self.trame_state.change("time_value")
         def update_time(time_value, **kwargs):
             self.scene.AnimationTime = time_value
             self.view.StillRender()
+            ctrl.view_update()
 
 
