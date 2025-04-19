@@ -86,7 +86,8 @@ with SinglePageLayout(server) as layout:
                     ctrl.filter_controls()
                 with vuetify3.VCol(cols=9, classes=""):
                     with vuetify3.VContainer(fluid=True, classes="fill-height"):
-                        paraview.VtkRemoteView(curr_viz.view, ref="view", classes="")
+                        view_widget = paraview.VtkRemoteView(curr_viz.view, ref="view", classes="")
+                        ctrl.view_update = view_widget.update
 
 # Start server
 if __name__ == "__main__":
