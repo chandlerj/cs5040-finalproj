@@ -37,6 +37,13 @@ class ClusteredState(BaseVisualization):
         # Set the initial state value to the lower threshold.
         self.trame_state.min_threshold = lower if lower is not None else 0.0
 
+        # Extract clip y origin
+        self.filters["clip"] = self.find_filter("Clip")
+        if not self.filters["clip"]:
+            raise RuntimeError("No Clip filter found in state file.")
+        clip_origin = list(self.filters["clip"].ClipType.Origin)
+        self.trame_state.clip_y_origin = clip_origin[1] if clip_origin else 0.0
+
         self.time_steps = self.extract_time_steps()
         self.trame_state.time_value = self.time_steps[0] if self.time_steps else 0.0
 
@@ -75,11 +82,27 @@ class ClusteredState(BaseVisualization):
             )
         )
 
+        widgets.append(
+            vuetify3.VSlider(
+                v_model=("clip_y_origin", self.trame_state.clip_y_origin),
+                min=-5,
+                max=5,
+                step=0.01,
+                label="Clip Y Origin",
+                ticks=True,
+                thumb_label=True,
+                hide_details=True,
+                class_="ma-4",
+            )
+        )
+
+
         return widgets
 
     def register_callbacks(self):
         server = get_server()
         ctrl = server.controller
+
         @self.trame_state.change("time_value")
         def update_time(time_value, **kwargs):
             self.scene.AnimationTime = time_value
@@ -96,3 +119,15 @@ class ClusteredState(BaseVisualization):
                 self.filters["threshold"].ThresholdMethod = "Between"
                 self.view.StillRender()
                 ctrl.view_update()
+
+        @self.trame_state.change("clip_y_origin")
+        def update_clip_y_origin(clip_y_origin, **kwargs):
+            clip = self.filters["clip"]
+            origin = list(clip.ClipType.Origin)
+            origin[1] = clip_y_origin
+            clip.ClipType.Origin = origin
+            self.view.StillRender()
+            ctrl.view_update()
+
+
+

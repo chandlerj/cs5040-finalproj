@@ -80,6 +80,7 @@ class IsoVolumeState(BaseVisualization):
                     class_="ma-4",
                 )
             )
+
         widgets.append(
             vuetify3.VSlider(
                 v_model=("clip_x_origin", self.trame_state.clip_x_origin),
