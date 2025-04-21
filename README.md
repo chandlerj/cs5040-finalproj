@@ -1,49 +1,60 @@
 # CS(5/6)040 Final Project: Visualizing the Saffman-Taylor Instability
 
+# Contributors
+- Chandler Justice
+- Ishara Mawelle 
+- Emily LaBonty
+
+
 # Deliverables
 
 - Effective Visualizations of the Saffman-Taylor Instability facilitated by the IEEE SciVis 2016 contest dataset
 - Interactive controls to manipulate the visualization to show different properties of the dataset/different facets of the Saffman-Taylor Instability
-- A portable program which can be used assuming the required dataset is supplied
-
+- A portable program which can be on any compatible system assuming the required dataset is supplied
 
 # Dataset
 The entire dataset (400+gb) can be obtained from [The San Diego Supercomputing Center](https://cloud.sdsc.edu/v1/AUTH_sciviscontest/2016/README.html). We also offer a subset of the dataset (5gb) available via [USU Box](https://usu.box.com/s/spgzms9nc8fen8mdbf9fnq5pt9hvzy10)
 
-# Tasks
+# Installation and setup
 
-- [ ] Create a portable environment which can display the dataset on any system using **Trame**
-    - [ ] Make paths to dataset dynamic so program can be run from any directory/system
-    - [ ] Create graceful error handling for if something is missing or file permissions are set up incorrectly
-    - [ ] This task will be complete once the dataset can be initialized and viewed from a web browser using Trame. Validation step would be having another groupmate try the completed environment
-- [ ] Visualization Selection: Use paraview to find compelling visualizations of the dataset
-    - [ ] Determine best parameters for the following visualizations
-        - [ ] Path Lines
-        - [ ] Steam Lines
-        - [ ] Glyphs
-        - [ ] Point clouds
-        - [ ] Flow Volumes
-        - [ ] Threshold sliders to only include particles that exceed a certain threshold for a certain property of the data (velocity and concentration)
-        - [ ] Another part of this task will be finding appealing color maps and transfer functions to apply to these visualizations
-        - [ ] this task will be complete once we have `.psvm` for each visualization allowing for reference/recreation of the obtained visualization/parameters
-- [ ] Extend our Trame implementation to include these visualizations
-    - [ ] Path Lines
-    - [ ] Steam Lines
-    - [ ] Glyphs
-    - [ ] Point clouds
-    - [ ] Flow Volumes
-    - [ ] Threshold sliders to only include particles that exceed a certain threshold for a certain property of the data (velocity and concentration)
-    - [ ] After that, we can add controls for these visualizations which allow for manipulations within the tolerances of the best found parameters
-    - [ ] This task is complete once the Trame environment supports viewing & manipulating our desired visualizations
-- [ ] Mid-project check in report
-    - [ ] This task will be complete once we have submitted our check in report via canvas
-- [ ] Author the final project report stating what we built and the research outcomes
-    - [ ] This task will be complete once we have submitted our final report via canvas
-- [ ] Implementation Demonstration
-    - [ ] This task will be complete once we have a demo video showing the interactive visualization working submitted via canvas.
+0. Download the Dataset from the USU Box mentioned above. Extract the desired run of the simulation into the `data/run01/` directory and bulk rename the `.vtu` files to the format `run_n.vtu`.
 
-**These tasks are stretch goals if our current scope proves to be too small**
-- [ ] Plots to describe the data: use plots provided by matplotlib (which is supported by trame) to further explain phenomena in the dataset (concentration distribution, particle movement amount, etc)
-- [ ] Controls to change the run/resolution used in visualization
-- [ ] Toggles to enable multiple visualizations simultaneously (perhaps only allow complementary visualizations; not just any arbitrary combination)
+1. Set up conda envrionment with Trame and Paraview. The environment can be created and activated with the following commands
+    ```
+    conda create -n pv-env -c conda-forge paraview trame trame-vtk trame-vuetify
+    conda activate pv-env
+    ```
+2. Update the state files to use your data directory. This can be done manually using a find and replace 
+(For example, in vim `:%s/C:\/Projects\/sci-viz\/cs5040-finalproj\/data\/run01\//\/home\/chandler\/Documents\/cs6040-finalproj\/data\//g`) 
+
+    or using our purpose built directory change script 
+
+    `python utils/dir_change.py state_files/isostate.pvsm 'C:/Projects/sci-viz/cs5040-finalproj/data/run01/' '/home/chandler/Documents/cs6040-finalproj/data/run01/'`
+
+    *(As a final alternative, you can also open the state files in paraview and then save them again which will automatically update the data directories)*
+
+3. Perform the clustering algorithm to create the version of the dataset needed for clustering using the `DBSCAN` script
+
+    `python utils/DBSCAN.py data/run01 data/run01_DBSCAN`
+
+4. At this point, you should be ready to run the trame app.
+
+    `python main.py`
+
+# Other Visualizations and Demonstration Video
+
+We also have some additional topological analysis of this dataset available in the `[20, 40, 60, 80,96]_Finger_Trace.pvsm` state files. These files can be loaded as inside of paraview **after** loading the `TopologyToolKit` plugin within Paraview (Tools => Manage Plugins => Select `TopologyToolKit` => Press load selected). These give a topological breakdown using critical point analysis of the data at select time steps. 
+
+Beyond this, we also have completed renderings and a demonstration video available on [Google Drive](https://drive.google.com/drive/folders/1I6ZTTRxMr5zN_VCXP5TDaXQaIwF4SmmD). Our demo video can be accessed directly [from here](https://drive.google.com/file/d/1TOYlnjXc1mQLMPYSBpkTsFqcUSFeT2C8/view?usp=sharing).
+
+# Academic Integrity Notice
+
+This repository contains a final project submission for Utah State University’s CS[5/6]040 course.
+
+**Any attempt to use, copy, or submit material from this repository as your own work in any academic setting constitutes plagiarism and is a violation of academic integrity policies.** Such actions may result in severe disciplinary consequences, including academic penalties and a permanent mark on your academic record.
+
+The authors of this project retain all rights to its contents and expressly disclaim any responsibility for academic misconduct by third parties who misuse this material.
+
+**Do not copy or submit any content from this repository for academic credit**
+
 
