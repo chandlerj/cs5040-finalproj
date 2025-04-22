@@ -24,20 +24,11 @@ The entire dataset (400+gb) can be obtained from [The San Diego Supercomputing C
     conda create -n pv-env -c conda-forge paraview trame trame-vtk trame-vuetify
     conda activate pv-env
     ```
-2. Update the state files to use your data directory. This can be done manually using a find and replace 
-(For example, in vim `:%s/C:\/Projects\/sci-viz\/cs5040-finalproj\/data\/run01\//\/home\/chandler\/Documents\/cs6040-finalproj\/data\//g`) 
-
-    or using our purpose built directory change script 
-
-    `python utils/dir_change.py state_files/isostate.pvsm 'C:/Projects/sci-viz/cs5040-finalproj/data/run01/' '/home/chandler/Documents/cs6040-finalproj/data/run01/'`
-
-    *(As a final alternative, you can also open the state files in paraview and then save them again which will automatically update the data directories)*
-
-3. Perform the clustering algorithm to create the version of the dataset needed for clustering using the `DBSCAN` script
+2. Perform the clustering algorithm to create the version of the dataset needed for clustering using the `DBSCAN` script
 
     `python utils/DBSCAN.py data/run01 data/run01_DBSCAN`
 
-4. At this point, you should be ready to run the trame app.
+3. At this point, you should be ready to run the trame app.
 
     `python main.py`
 
