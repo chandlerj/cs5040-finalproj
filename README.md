@@ -34,7 +34,7 @@ The entire dataset (400+gb) can be obtained from [The San Diego Supercomputing C
 
 # Other Visualizations and Demonstration Video
 
-We also have some additional topological analysis of this dataset available in the `ms_[20, 30, 40, 50,59].pvsm` state files. These files can be loaded inside of paraview **after** loading the `TopologyToolKit` plugin within Paraview (Tools => Manage Plugins => Select `TopologyToolKit` => Press load selected). These give a topological breakdown using critical point analysis of the data at select time steps. 
+We also have some additional topological analysis of this dataset available in `state_files/morse_smale_state/ms_[20, 30, 40, 50,59].pvsm`. These files can be loaded inside of paraview **after** loading the `TopologyToolKit` plugin within Paraview (Tools => Manage Plugins => Select `TopologyToolKit` => Press load selected). These give a topological breakdown using critical point analysis of the data at select time steps. 
 
 Beyond this, we also have completed renderings and a demonstration video available on [Google Drive](https://drive.google.com/drive/folders/1I6ZTTRxMr5zN_VCXP5TDaXQaIwF4SmmD). Our demo video can be accessed directly [from here](https://drive.google.com/file/d/1TOYlnjXc1mQLMPYSBpkTsFqcUSFeT2C8/view?usp=sharing).
 
